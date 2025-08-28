@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: oauth2-proxy
+    spec:
+      containers:
+      - name: oauth2-proxy
+        image: quay.io/oauth2-proxy/oauth2-proxy:v7.4.0
+        args:
+        - --alpha-config=/etc/oauth2_proxy/alpha_config.yml
+        env:
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth2-creds
+              key: cookie-secret
+        - name: OAUTH2_PROXY_BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: oauth2-mlflow-creds
+              key: basic-password
+        - name: OAUTH2_PROXY_EMAIL_DOMAINS
+          value: "*"
+        ports:
+        - containerPort: 4180
+          name: http
+        volumeMounts:
+        - name: alpha-config
+          mountPath: /etc/oauth2_proxy
+        - name: client-secret-volume
+          mountPath: /etc/oauth2_proxy_secrets
+          readOnly: true
+      volumes:
+      - name: alpha-config
+        configMap:
+          name: oauth2-proxy-alpha-config
+      - name: client-secret-volume
+        secret:
+          secretName: oauth2-creds
+          items:
+          - key: client-secret
+            path: client-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy-service
+spec:
+  selector:
+    app: oauth2-proxy
+  ports:
+  - protocol: TCP
+    port: 4180
+    targetPort: 4180

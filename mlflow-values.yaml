@@ -1,0 +1,36 @@
+minio:
+  enabled: false
+
+tracking:
+  auth:
+    enabled: true
+    existingSecret: mlflow-creds
+
+  service:
+    type: ClusterIP
+    port: 5000
+    trackPort: 5000
+    tls: false
+
+  extraEnvVars:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /opt/bitnami/mlflow/gcs.json
+
+  extraVolumeMounts:
+    - name: gcs-creds
+      mountPath: /opt/bitnami/mlflow
+      readOnly: true
+
+  extraVolumes:
+    - name: gcs-creds
+      secret:
+        secretName: gcs-creds
+
+
+  defaultArtifactRoot: gs://mlflow-753323/artifacts
+
+postgresql:
+  enabled: true
+  auth:
+    username: mlflow
+    existingSecret: postgres-creds

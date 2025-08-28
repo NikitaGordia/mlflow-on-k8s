@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oauth2-proxy-alpha-config
+data:
+  alpha_config.yml: |
+    server:
+      BindAddress: "0.0.0.0:4180"
+    upstreamConfig:
+      upstreams:
+        - id: mlflow-tracking
+          uri: http://mlflow-tracking:80
+          path: /
+    providers:
+      - id: github-provider
+        provider: github
+        clientID: Ov23liOXzIWjspLQGx8b
+        clientSecretFile: /etc/oauth2_proxy_secrets/client-secret
+        scope: "user:email"
+    injectRequestHeaders:
+      - name: Authorization
+        values:
+          - claim: email
+            basicAuthPassword:
+              fromEnv: OAUTH2_PROXY_BASIC_AUTH_PASSWORD
