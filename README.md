@@ -333,6 +333,10 @@ kubectl apply -f k8s/oauth2-proxy-alpha-config.yaml
 kubectl apply -f k8s/oauth2-proxy.yaml
 ```
 
+### TODO
+
+Add backup and restore procedures for MLflow metadata and artifacts. 
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
