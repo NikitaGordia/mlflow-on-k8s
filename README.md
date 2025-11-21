@@ -8,7 +8,7 @@
 ![PostgreSQL](https://img.shields.io/badge/postgresql-4169e1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Google Cloud](https://img.shields.io/badge/GoogleCloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)
 
-A production-ready MLflow deployment on Kubernetes with OAuth2 authentication, SSL certificates, and Google Cloud Storage integration.
+Lightweight MLflow deployment on Kubernetes with OAuth2 authentication, SSL certificates, and Google Cloud Storage integration.
 
 ## Architecture Overview
 
